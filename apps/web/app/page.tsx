@@ -1,0 +1,172 @@
+import Header from "@/components/Header";
+import SearchSection from "@/components/SearchSection";
+import PropertyTypes from "@/components/PropertyTypes";
+import FeaturedListings from "@/components/FeaturedListings";
+import PopularCities from "@/components/PopularCities";
+import Footer from "@/components/Footer";
+import { db } from "@monkeyprint/db";
+import {
+  HouseCategory,
+  HouseType,
+  Governorat,
+  Emplacement,
+  HouseState,
+  SolType,
+  House,
+  City,
+  HeatingType,
+  GardenType,
+} from "@/types";
+
+// Server-side data fetching for the home page
+async function getHomePageData() {
+  // Fetch all cities for search filter
+  const citiesRaw = await db.city.findMany({ orderBy: { name: "asc" } });
+  const cities: City[] = citiesRaw.map((city) => ({
+    ...city,
+    governorat: city.governorat as Governorat, // Cast to enum
+  }));
+
+  // Fetch property type counts
+  const typeCounts = await Promise.all(
+    Object.values(HouseType).map(async (type) => ({
+      type,
+      count: await db.house.count({
+        where: { type, isDeleted: false },
+      }),
+    }))
+  );
+
+  // Fetch featured listings (latest 12 houses, with city relation)
+  const listingsRaw = await db.house.findMany({
+    where: { isDeleted: false },
+    orderBy: { createdAt: "desc" },
+    take: 12,
+    include: {
+      position: { include: { city: true } },
+      options: true,
+      admin: true,
+    },
+  });
+
+  // Map listings to match the House interface (convert nulls to undefined, cast enums)
+  const listings: House[] = listingsRaw.map((house) => ({
+    ...house,
+    category: house.category as HouseCategory,
+    type: house.type as HouseType,
+    emplacement: house.emplacement as Emplacement | undefined,
+    state: house.state as HouseState | undefined,
+    solType: house.solType as SolType | undefined,
+    description: house.description ?? undefined,
+    area: house.area ?? undefined,
+    prixMin: house.prixMin ?? undefined,
+    prixMax: house.prixMax ?? undefined,
+    floors: house.floors ?? undefined,
+    startDate: house.startDate ?? undefined,
+    endDate: house.endDate ?? undefined,
+    position: house.position
+      ? {
+          ...house.position,
+          address: house.position.address ?? undefined,
+          mapPosition: house.position.mapPosition ?? undefined,
+          governorat: house.position.governorat as Governorat,
+          cityId: house.position.cityId,
+          city: house.position.city
+            ? {
+                ...house.position.city,
+                governorat: house.position.city.governorat as Governorat,
+              }
+            : undefined,
+        }
+      : undefined,
+    options: house.options
+      ? {
+          ...house.options,
+          garden: house.options.garden as GardenType,
+          heating: house.options.heating as HeatingType,
+        }
+      : undefined,
+    admin: house.admin ?? undefined,
+  }));
+
+  // Fetch total counts per category
+  const totalCounts: Record<HouseCategory, number> = {
+    VENTE: await db.house.count({
+      where: { category: HouseCategory.VENTE, isDeleted: false },
+    }),
+    LOCATION: await db.house.count({
+      where: { category: HouseCategory.LOCATION, isDeleted: false },
+    }),
+    LOCATION_VACANCES: await db.house.count({
+      where: { category: HouseCategory.LOCATION_VACANCES, isDeleted: false },
+    }),
+  };
+
+  // Fetch top 5 popular cities by house count
+  const cityStats = await db.house.groupBy({
+    by: ["positionId"],
+    where: { isDeleted: false },
+    _count: { _all: true },
+  });
+
+  // Map positionId to cityId
+  const positions = await db.housePosition.findMany({
+    where: { id: { in: cityStats.map((c) => c.positionId) } },
+    include: { city: true },
+  });
+
+  // Aggregate city counts
+  const cityCountMap: Record<
+    string,
+    { id: string; name: string; count: number }
+  > = {};
+  for (const stat of cityStats) {
+    const pos = positions.find((p) => p.id === stat.positionId);
+    if (pos && pos.city) {
+      if (!cityCountMap[pos.city.id]) {
+        cityCountMap[pos.city.id] = {
+          id: pos.city.id,
+          name: pos.city.name,
+          count: 0,
+        };
+      }
+      cityCountMap[pos.city.id].count += stat._count._all;
+    }
+  }
+  const popularCities = Object.values(cityCountMap)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5);
+
+  return {
+    cities,
+    typeCounts,
+    listings,
+    totalCounts,
+    popularCities,
+  };
+}
+
+export default async function Home() {
+  const { cities, typeCounts, listings, totalCounts, popularCities } =
+    await getHomePageData();
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      <main className="flex-grow">
+        <SearchSection cities={cities} />
+
+        <div className="container mx-auto px-4 py-8">
+          <PropertyTypes typeCounts={typeCounts} />
+          <FeaturedListings
+            listings={listings}
+            totalCounts={totalCounts}
+            initialCategory={HouseCategory.LOCATION}
+          />
+          <PopularCities cities={popularCities} />
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
+}

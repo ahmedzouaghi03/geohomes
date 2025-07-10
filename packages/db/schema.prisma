@@ -1,0 +1,211 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// admin Enums 
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+}
+
+// House Enums
+enum Emplacement {
+  RDC
+  PREMIERE_ETAGE
+  DEUXIEME_ETAGE
+  TROISIEME_ETAGE
+}
+
+enum HouseCategory {
+  VENTE
+  LOCATION
+  LOCATION_VACANCES
+}
+
+enum HouseType {
+  APPARTEMENT
+  MAISON
+  VILLA
+}
+
+enum HouseState {
+  NOUVEAU
+  BON_ETAT
+  ETAT_ACCEPTABLE
+}
+
+enum SolType {
+  PAQUET
+  MARBRE
+  CARRELAGE
+}
+
+// Extras Enums
+enum HeatingType {
+  NONE
+  CHAUFFAGE_CENTRALE
+  CHEMINE
+}
+
+enum GardenType {
+  NONE
+  NORMAL
+  GAZON
+}
+
+// Location Enums
+enum Governorat {
+  SOUSSE
+}
+
+model Admin {
+  id                   String    @id @default(cuid())
+  name                 String
+  email                String    @unique
+  password             String
+  phoneNumbers          String[] 
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  isDeleted            Boolean   @default(false)
+  role                 AdminRole @default(ADMIN)
+  passwordResetToken   String?   @unique
+  passwordResetExpires DateTime?
+  houses      House[]
+}
+
+
+model Client {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  favorites Favorite[]
+}
+
+
+model Favorite {
+  id        String   @id @default(cuid())
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  clientId  String
+  house     House    @relation(fields: [houseId], references: [id], onDelete: Cascade)
+  houseId   String
+  createdAt DateTime @default(now())
+
+  @@unique([clientId, houseId])
+}
+
+
+model House {
+  id          String        @id @default(cuid())
+  title       String
+  description String?       @db.Text
+  area        Int?
+  rooms       Int
+  bathrooms   Int
+  toilets     Int
+  floors      Int?          // Optional for APPARTEMENT
+  
+  category    HouseCategory @default(LOCATION)
+  type        HouseType     @default(APPARTEMENT)
+  emplacement Emplacement?  // Optional for VILLA and MAISON
+  state       HouseState?    @default(BON_ETAT)
+  solType     SolType?       @default(CARRELAGE)
+  
+  images      String[]
+  prixMin     Float?
+  prixMax     Float?
+  
+  startDate   DateTime?
+  endDate     DateTime?
+  
+  phoneNumbers String[]
+  
+  // Relations
+  position    HousePosition @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  positionId  String        @unique
+  
+  options     HouseOptions  @relation(fields: [optionsId], references: [id], onDelete: Cascade)
+  optionsId   String        @unique
+  
+  admin       Admin         @relation(fields: [adminId], references: [id])
+  adminId     String
+  
+  favorites   Favorite[]
+  
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  isDeleted   Boolean       @default(false)
+}
+
+// City model to handle relationship with Governorate
+model City {
+  id           String     @id @default(cuid())
+  name         String
+  governorat   Governorat
+  positions    HousePosition[]
+  
+  @@unique([name, governorat])
+}
+
+// House Position Model
+model HousePosition {
+  id          String     @id @default(cuid())
+  address     String?
+  mapPosition String?
+  governorat  Governorat @default(SOUSSE)
+  
+  // Relation to City
+  city        City       @relation(fields: [cityId], references: [id])
+  cityId      String
+  
+  // Relation to House
+  house       House?
+}
+
+// House Options Model
+model HouseOptions {
+  id               String      @id @default(cuid())
+  
+  // Swimming and Comfort
+  piscine          Boolean     @default(false)
+  piedDansEau      Boolean     @default(false)
+  elevator         Boolean     @default(false)
+  clim             Boolean     @default(false)
+  internet         Boolean     @default(false)
+  // Type Enums
+  garden           GardenType  @default(NONE)
+  heating          HeatingType @default(NONE)
+
+  // Security
+  porteBlinde      Boolean     @default(false)
+  doubleVitrage    Boolean     @default(false)
+  cameraSecurite   Boolean     @default(false)
+  concierge        Boolean     @default(true)
+  
+  
+  // Furnishing
+  furnished        Boolean     @default(true)
+  kitchenEquipped  Boolean     @default(true)
+  refrigerator     Boolean     @default(false)
+  four             Boolean     @default(false)
+  tv               Boolean     @default(false)
+  washingMachine   Boolean     @default(false)
+  microwave        Boolean     @default(false)
+  
+  // Access and Extras
+  entreSeul        Boolean     @default(true)
+  garage           Boolean     @default(false)
+  parking          Boolean     @default(false)
+  terrasse         Boolean     @default(false)
+  animalAuthorized Boolean     @default(false)
+  
+  // Relation to House
+  house            House?
+}
