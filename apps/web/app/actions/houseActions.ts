@@ -3,13 +3,14 @@
 import { db } from "@monkeyprint/db";
 import { revalidatePath } from "next/cache";
 import {
+  CreateHouseData,
+  UpdateHouseData,
   HouseCategory,
   HouseType,
   Governorat,
   HeatingType,
   GardenType,
-} from "@monkeyprint/db";
-import { CreateHouseData, UpdateHouseData } from "@/types";
+} from "@/types";
 
 export async function createHouse(data: CreateHouseData) {
   try {
