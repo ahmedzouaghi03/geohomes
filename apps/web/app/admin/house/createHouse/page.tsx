@@ -7,7 +7,7 @@ import HouseCreator3 from "@/components/admin/HouseCreator3";
 import { createHouse } from "@/actions/houseActions";
 import { getCities } from "@/actions/cityActions";
 import { getCurrentUser } from "@/actions/authActions";
-import { getAdminById } from "@/api/auth/currentUser/route";
+import { getAdminById } from "@/actions/adminActions";
 import { toast } from "react-hot-toast";
 import {
   HouseCategory,
