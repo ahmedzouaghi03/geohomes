@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
         email,
         password: await hashPassword(password),
         role,
-        phoneNumber: phoneNumber ? [phoneNumber] : [],
+        phoneNumbers: phoneNumber ? [phoneNumber] : [],
       },
     });
 
