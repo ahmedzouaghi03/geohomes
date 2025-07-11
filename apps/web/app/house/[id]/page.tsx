@@ -1,6 +1,5 @@
 import { getHouseById } from "@/actions/houseActions";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import { House } from "@/types";
 import ContactForm from "@/components/house/ContactForm";
 import HouseMapWrapper from "@/components/house/HouseMapWrapper";
@@ -40,9 +39,10 @@ import {
 export default async function HouseDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const result = await getHouseById(params.id);
+  const { id } = await params;
+  const result = await getHouseById(id);
   if (!result.success) return notFound();
   const house = result.data as House;
 
