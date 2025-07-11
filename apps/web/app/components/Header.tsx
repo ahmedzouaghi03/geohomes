@@ -7,27 +7,64 @@ import { getCurrentUser } from "@/actions/authActions";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const pathname = usePathname();
   const showAdminHeader = pathname.startsWith("/admin");
   const notShowHeader = pathname.startsWith("/auth");
 
-  
   useEffect(() => {
     const checkAdminStatus = async () => {
       try {
         const user = await getCurrentUser();
         setIsAdmin(!!user?.id);
+        setIsSuperAdmin(user?.role === "SUPER_ADMIN");
       } catch (error) {
         console.error("Failed to check admin status:", error);
         setIsAdmin(false);
+
+        // Clear invalid token if getCurrentUser fails
+        if (pathname.startsWith("/admin")) {
+          document.cookie =
+            "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+          window.location.href = "/auth/login";
+        }
       } finally {
         setLoading(false);
       }
     };
 
     checkAdminStatus();
-  }, []);
+  }, [pathname]);
+
+  const handleLogout = async () => {
+    try {
+      // Call logout API to clear server-side cookie
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include", // Important for cookies
+      });
+
+      // Clear client-side cookie as well
+      document.cookie =
+        "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+
+      // Update state
+      setIsAdmin(false);
+      setIsSuperAdmin(false);
+
+      // Redirect to login
+      window.location.href = "/auth/login";
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Fallback: clear cookie manually and redirect
+      document.cookie =
+        "adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+      setIsAdmin(false);
+      setIsSuperAdmin(false);
+      window.location.href = "/auth/login";
+    }
+  };
 
   if (notShowHeader) {
     return null;
@@ -96,16 +133,27 @@ export default function Header() {
           {/* Desktop login/logout buttons */}
           <div className="hidden md:flex items-center">
             {isAdmin ? (
-              <Link
-                href="/auth/login"
-                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
-              >
-                Logout
-              </Link>
+              <>
+                {/* Add Admin button - only show for SUPER_ADMIN */}
+                {isSuperAdmin && (
+                  <Link
+                    href="/auth/signup"
+                    className="bg-blue-500 text-white px-4 py-2 mx-2 rounded-md hover:bg-blue-600 transition"
+                  >
+                    Add Admin
+                  </Link>
+                )}
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
+                >
+                  Logout
+                </button>
+              </>
             ) : (
               <Link
                 href="/auth/login"
-                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition"
+                className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-600 transition"
               >
                 Login
               </Link>
@@ -223,17 +271,28 @@ export default function Header() {
             {/* Login/Logout button - mobile */}
             <li>
               {isAdmin ? (
-                <Link
-                  href="/auth/login"
-                  className="block bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition mx-2"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Logout
-                </Link>
+                <>
+                  {/* Add Admin button - mobile - only show for SUPER_ADMIN */}
+                  {isSuperAdmin && (
+                    <Link
+                      href="/auth/signup"
+                      className="block bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition mx-2 mb-2"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Add Admin
+                    </Link>
+                  )}
+                  <button
+                    onClick={handleLogout}
+                    className="block bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition mx-2 w-full text-left"
+                  >
+                    Logout
+                  </button>
+                </>
               ) : (
                 <Link
                   href="/auth/login"
-                  className="block bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition mx-2"
+                  className="block bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-600 transition mx-2"
                   onClick={() => setMenuOpen(false)}
                 >
                   Login

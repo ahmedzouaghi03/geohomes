@@ -21,11 +21,25 @@ export default async function middleware(request: NextRequest) {
   const token = request.cookies.get("adminToken")?.value;
   const user = await getUserFromToken(token);
 
-  // Logout on visiting /auth/login
-  if (pathname === "/auth/login" && token) {
-    const response = NextResponse.redirect(new URL("/auth/login", request.url));
-    response.cookies.set("adminToken", "", { path: "/", maxAge: 0 });
-    return response;
+  // Debug logging for production
+  if (process.env.NODE_ENV === "production") {
+    console.log("Middleware - Path:", pathname);
+    console.log("Middleware - Token exists:", !!token);
+    console.log("Middleware - User exists:", !!user);
+  }
+
+  if (pathname === "/auth/login") {
+    if (token && user) {
+      // If logged in with valid token, redirect to dashboard
+      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+    } else if (token && !user) {
+      // If token exists but invalid, clear it and allow login
+      const response = NextResponse.next();
+      response.cookies.set("adminToken", "", { path: "/", maxAge: 0 });
+      return response;
+    }
+    // If no token, allow access to login page
+    return NextResponse.next();
   }
 
   // Restrict /auth/signup to only SUPER_ADMIN
@@ -40,13 +54,6 @@ export default async function middleware(request: NextRequest) {
     }
     // SUPER_ADMIN can access /auth/signup, so allow
     return NextResponse.next();
-  }
-
-  // If logged in and visiting /auth/login, redirect to dashboard
-  if (user && pathname.startsWith("/auth/login")) {
-    return NextResponse.redirect(
-      new URL("/admin/house/createHouse", request.url)
-    );
   }
 
   // Restrict /admin pages to logged-in admins
