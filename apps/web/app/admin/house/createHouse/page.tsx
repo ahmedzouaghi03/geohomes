@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import HouseCreator1 from "@/components/admin/HouseCreator1";
 import HouseCreator2 from "@/components/admin/HouseCreator2";
 import HouseCreator3 from "@/components/admin/HouseCreator3";
@@ -23,9 +24,16 @@ import {
 } from "@/types";
 
 export default function CreateHousePage() {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [cities, setCities] = useState<City[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Ensure component is mounted before using window
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     async function setAdminInfo() {
@@ -171,7 +179,10 @@ export default function CreateHousePage() {
 
     if (currentStep < 3) {
       setCurrentStep((prev) => prev + 1);
-      window.scrollTo(0, 0);
+      // Only scroll if component is mounted (client-side)
+      if (isMounted && typeof window !== "undefined") {
+        window.scrollTo(0, 0);
+      }
     }
   };
 
@@ -179,7 +190,10 @@ export default function CreateHousePage() {
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep((prev) => prev - 1);
-      window.scrollTo(0, 0);
+      // Only scroll if component is mounted (client-side)
+      if (isMounted && typeof window !== "undefined") {
+        window.scrollTo(0, 0);
+      }
     }
   };
 
@@ -206,10 +220,11 @@ export default function CreateHousePage() {
       });
 
       if (result.success) {
-        toast.success("Redirecting...");
         toast.success("Property created successfully!");
+        toast.success("Redirecting...");
         setTimeout(() => {
-          window.location.reload();
+          // Use Next.js router instead of window.location.reload()
+          router.push("/admin/dashboard");
         }, 1500);
       } else {
         throw new Error(result.error);
@@ -221,6 +236,11 @@ export default function CreateHousePage() {
       setIsSubmitting(false);
     }
   };
+
+  // Don't render until component is mounted (prevents hydration mismatch)
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
