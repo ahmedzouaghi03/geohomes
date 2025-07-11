@@ -1,14 +1,13 @@
 import { Suspense } from "react";
 import { db } from "@monkeyprint/db";
-import { HouseCategory, HouseType } from "@monkeyprint/db";
 import HouseList from "@/components/house/HouseList";
 import { getHouses } from "@/actions/houseActions";
-import { House } from "@/types";
+import { House, HouseCategory, HouseType } from "@/types";
 
 export const dynamic = "force-dynamic";
 
 interface SearchParams {
-  [key: string]: string | string[] | undefined; // Add index signature to satisfy Record type
+  [key: string]: string | string[] | undefined;
   page?: string;
   category?: string;
   type?: string;
@@ -38,27 +37,26 @@ async function getCities() {
 export default async function HousePage({
   searchParams,
 }: {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }) {
+  const params = await searchParams;
   // Parse search parameters
-  const page = searchParams.page ? parseInt(searchParams.page as string) : 1;
-  const category = searchParams.category as HouseCategory | undefined;
-  const type = searchParams.type as HouseType | undefined;
-  const minPrice = searchParams.minPrice
-    ? parseFloat(searchParams.minPrice as string)
+  const page = params.page ? parseInt(params.page as string) : 1;
+  const category = params.category as HouseCategory | undefined;
+  const type = params.type as HouseType | undefined;
+  const minPrice = params.minPrice
+    ? parseFloat(params.minPrice as string)
     : undefined;
-  const maxPrice = searchParams.maxPrice
-    ? parseFloat(searchParams.maxPrice as string)
+  const maxPrice = params.maxPrice
+    ? parseFloat(params.maxPrice as string)
     : undefined;
-  const rooms = searchParams.rooms
-    ? parseInt(searchParams.rooms as string)
+  const rooms = params.rooms ? parseInt(params.rooms as string) : undefined;
+  const cityId = params.cityId as string | undefined;
+  const minArea = params.minArea
+    ? parseInt(params.minArea as string)
     : undefined;
-  const cityId = searchParams.cityId as string | undefined;
-  const minArea = searchParams.minArea
-    ? parseInt(searchParams.minArea as string)
-    : undefined;
-  const startDate = searchParams.startDate as string | undefined;
-  const endDate = searchParams.endDate as string | undefined;
+  const startDate = params.startDate as string | undefined;
+  const endDate = params.endDate as string | undefined;
 
   // Fetch cities for the filter
   const cities = await getCities();
