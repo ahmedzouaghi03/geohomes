@@ -12,6 +12,7 @@ export default function Header() {
   const showAdminHeader = pathname.startsWith("/admin");
   const notShowHeader = pathname.startsWith("/auth");
 
+  
   useEffect(() => {
     const checkAdminStatus = async () => {
       try {
@@ -71,71 +72,77 @@ export default function Header() {
               </>
             )}
 
-            {/* Public links - only show on non-admin pages */}
-
-            <>
-              <Link
-                href="/house"
-                className="text-gray-700 hover:text-orange-600"
-              >
-                Maisons
-              </Link>
-              <Link
-                href="/aboutUs"
-                className="text-gray-700 hover:text-orange-600"
-              >
-                A propos
-              </Link>
-              <Link
-                href="/contact"
-                className="text-gray-700 hover:text-orange-600"
-              >
-                Contact
-              </Link>
-            </>
+            {/* Public links - always show */}
+            <Link href="/house" className="text-gray-700 hover:text-orange-600">
+              Maisons
+            </Link>
+            <Link
+              href="/aboutUs"
+              className="text-gray-700 hover:text-orange-600"
+            >
+              A propos
+            </Link>
+            <Link
+              href="/contact"
+              className="text-gray-700 hover:text-orange-600"
+            >
+              Contact
+            </Link>
           </nav>
         </div>
 
-        {/* Desktop logout button - only show when admin is logged in */}
-        {isAdmin && (
-          <Link
-            href="/auth/login"
-            className="hidden md:block bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
-          >
-            Logout
-          </Link>
-        )}
-
-        {/* Mobile menu button */}
-        <button
-          className="md:hidden flex items-center px-2 py-1 border rounded text-gray-700 border-gray-300"
-          onClick={() => setMenuOpen((open) => !open)}
-          aria-label="Ouvrir le menu"
-        >
-          <svg
-            className="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            {menuOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
+        {/* Right side buttons */}
+        <div className="flex items-center space-x-4">
+          {/* Desktop login/logout buttons */}
+          <div className="hidden md:flex items-center">
+            {isAdmin ? (
+              <Link
+                href="/auth/login"
+                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
+              >
+                Logout
+              </Link>
             ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 8h16M4 16h16"
-              />
+              <Link
+                href="/auth/login"
+                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition"
+              >
+                Login
+              </Link>
             )}
-          </svg>
-        </button>
+          </div>
+
+          {/* Mobile menu button */}
+          <button
+            className="md:hidden flex items-center px-2 py-1 border rounded text-gray-700 border-gray-300"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-label="Ouvrir le menu"
+          >
+            <svg
+              className="h-6 w-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {menuOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 8h16M4 16h16"
+                />
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
@@ -184,40 +191,38 @@ export default function Header() {
               </>
             )}
 
-            {/* Public links  */}
+            {/* Public links - always show */}
+            <li>
+              <Link
+                href="/house"
+                className="block text-gray-700 hover:text-orange-600 py-2"
+                onClick={() => setMenuOpen(false)}
+              >
+                Maisons
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/aboutUs"
+                className="block text-gray-700 hover:text-orange-600 py-2"
+                onClick={() => setMenuOpen(false)}
+              >
+                A propos
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/contact"
+                className="block text-gray-700 hover:text-orange-600 py-2"
+                onClick={() => setMenuOpen(false)}
+              >
+                Contact
+              </Link>
+            </li>
 
-            <>
-              <li>
-                <Link
-                  href="/house"
-                  className="block text-gray-700 hover:text-orange-600 py-2"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Maisons
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/aboutUs"
-                  className="block text-gray-700 hover:text-orange-600 py-2"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  A propos
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/contact"
-                  className="block text-gray-700 hover:text-orange-600 py-2"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Contact
-                </Link>
-              </li>
-            </>
-            {/* Logout button - only show when admin is logged in */}
-            {isAdmin && (
-              <li>
+            {/* Login/Logout button - mobile */}
+            <li>
+              {isAdmin ? (
                 <Link
                   href="/auth/login"
                   className="block bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition mx-2"
@@ -225,8 +230,16 @@ export default function Header() {
                 >
                   Logout
                 </Link>
-              </li>
-            )}
+              ) : (
+                <Link
+                  href="/auth/login"
+                  className="block bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition mx-2"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Login
+                </Link>
+              )}
+            </li>
           </ul>
         </nav>
       )}
