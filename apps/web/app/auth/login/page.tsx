@@ -33,8 +33,11 @@ export default function AdminLoginPage() {
       }
 
       toast.success("Login successful!");
-      window.dispatchEvent(new Event("storage"));
-      router.push("/admin/dashboard");
+
+      // Redirect to admin dashboard on success
+      setTimeout(() => {
+        router.push("/admin/dashboard");
+      }, 1500);
     } catch (err: any) {
       toast.error(err.message || "An error occurred during login");
       console.error("Login error:", err);
