@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import HouseCreator1 from "@/components/admin/HouseCreator1";
-import HouseCreator2 from "@/components/admin/HouseCreator2";
-import HouseCreator3 from "@/components/admin/HouseCreator3";
+import dynamicImport from "next/dynamic";
+
 import { createHouse } from "@/actions/houseActions";
 import { getCities } from "@/actions/cityActions";
 import { getCurrentUser } from "@/actions/authActions";
@@ -22,6 +21,30 @@ import {
   City,
   CreateHouseData,
 } from "@/types";
+
+export const dynamic = "force-dynamic";
+
+// Dynamically import components to prevent SSR issues
+const HouseCreator1 = dynamicImport(
+  () => import("@/components/admin/HouseCreator1"),
+  {
+    ssr: false,
+  }
+);
+
+const HouseCreator2 = dynamicImport(
+  () => import("@/components/admin/HouseCreator2"),
+  {
+    ssr: false,
+  }
+);
+
+const HouseCreator3 = dynamicImport(
+  () => import("@/components/admin/HouseCreator3"),
+  {
+    ssr: false,
+  }
+);
 
 export default function CreateHousePage() {
   const router = useRouter();
