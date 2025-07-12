@@ -30,8 +30,48 @@ const HouseCard: React.FC<HouseCardProps> = ({ house }) => {
   };
 
   const handleContactClick = () => {
-    // Contact functionality
-    console.log("Contact clicked for house:", house.id);
+    // Check if house has admin/owner contact information
+    if (house.phoneNumbers && house.phoneNumbers.length > 0) {
+      // Create a pre-filled message for the admin
+      const message = `Bonjour, je suis intéressé(e) par votre propriété: ${house.title}. 
+    
+Détails de la propriété:
+- Localisation: ${house.position?.city?.name || "N/A"}, ${house.position?.address || "N/A"}
+- Surface: ${house.area || "N/A"} m²
+- Chambres: ${house.bathrooms}
+- Pièces: ${house.rooms}
+
+Pourriez-vous me donner plus d'informations s'il vous plaît?
+
+Merci!`;
+
+      // Open WhatsApp with pre-filled message
+      window.open(
+        `https://wa.me/${house.phoneNumbers[0]}?text=${encodeURIComponent(message)}`,
+        "_blank"
+      );
+    } else if (house.admin?.email) {
+      // Fallback to email if no phone number is available
+      const subject = `Demande d'information - ${house.title}`;
+      const body = `Bonjour,
+
+Je suis intéressé(e) par votre propriété: ${house.title}
+
+Détails de la propriété:
+- Localisation: ${house.position?.city?.name || "N/A"}, ${house.position?.address || "N/A"}
+- Surface: ${house.area || "N/A"} m²
+- Chambres: ${house.bathrooms}
+- Pièces: ${house.rooms}
+
+Pourriez-vous me donner plus d'informations s'il vous plaît?
+
+Merci!`;
+
+      window.location.href = `mailto:${house.admin?.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    } else {
+      // No contact information available
+      alert("Aucune information de contact disponible pour cette propriété.");
+    }
   };
 
   const getExtras = () => {
@@ -76,7 +116,18 @@ const HouseCard: React.FC<HouseCardProps> = ({ house }) => {
 
   const handleWhatsAppClick = () => {
     if (house.phoneNumbers && house.phoneNumbers.length > 0) {
-      const message = `Hello, I'm interested in your property: ${house.title}`;
+      const message = `Bonjour, je suis intéressé(e) par votre propriété: ${house.title}. 
+    
+Détails de la propriété:
+- Localisation: ${house.position?.city?.name || "N/A"}, ${house.position?.address || "N/A"}
+- Surface: ${house.area || "N/A"} m²
+- Chambres: ${house.bathrooms}
+- Pièces: ${house.rooms}
+- Extras: ${extras.join(", ") || "Aucun"}
+
+Pourriez-vous me donner plus d'informations s'il vous plaît?
+
+Merci!`;
       window.open(
         `https://wa.me/${house.phoneNumbers[0]}?text=${encodeURIComponent(message)}`,
         "_blank"
