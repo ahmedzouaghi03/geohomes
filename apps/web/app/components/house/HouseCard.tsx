@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { HeartIcon } from "lucide-react";
+import { ChevronLeft, ChevronRight, HeartIcon } from "lucide-react";
 import { HeartOffIcon as HeartSolidIcon } from "lucide-react";
 import WishlistModal from "@/components/house/WishlistModal";
 import { House } from "@/types";
@@ -191,14 +191,14 @@ Merci!`;
               className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-1 shadow hover:bg-white z-10"
               aria-label="Previous image"
             >
-              <span className="text-xl">&#8592;</span>
+              <ChevronLeft className="w-5 h-5 text-gray-700" />
             </button>
             <button
               onClick={nextImg}
               className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-1 shadow hover:bg-white z-10"
               aria-label="Next image"
             >
-              <span className="text-xl">&#8594;</span>
+              <ChevronRight className="w-5 h-5 text-gray-700" />
             </button>
           </>
         )}

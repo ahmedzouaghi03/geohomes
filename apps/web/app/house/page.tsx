@@ -94,7 +94,7 @@ export default async function HousePage({
               : ""}
       </h1>
 
-      <Suspense fallback={<div>Loading cities...</div>}>
+      <Suspense fallback={<div>Loading...</div>}>
         <HouseList
           initialHouses={houses}
           totalPages={totalPages}
