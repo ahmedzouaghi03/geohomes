@@ -4,7 +4,7 @@ const f = createUploadthing();
 
 export const ourFileRouter = {
   productImage: f({
-    image: { maxFileSize: "4MB", maxFileCount: 1 },
+    image: { maxFileSize: "4MB", maxFileCount: 20 },
   }).onUploadComplete(async ({ metadata, file }) => {
     const userId = (metadata as any).userId;
     console.log("Upload complete for userId:", userId);

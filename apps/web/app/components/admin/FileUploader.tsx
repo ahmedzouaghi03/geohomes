@@ -12,13 +12,17 @@ interface UploadResponse {
 interface UploaderProps {
   handleUploadComplete: (res: UploadResponse[]) => void;
   buttonText?: string;
+  maxFileCount?: number;
 }
 
 export default function Uploader({
   handleUploadComplete,
   buttonText = "Change Image",
+  maxFileCount = 20,
 }: UploaderProps) {
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
+  const [uploadingCount, setUploadingCount] = useState<number>(0);
+
   const apiKey = process.env.UPLOADTHING_TOKEN;
   const appId = process.env.UPLOADTHING_APP_ID;
   const regions = process.env.UPLOADTHING_REGIONS?.split(",") || ["us", "eu"];
@@ -37,6 +41,7 @@ export default function Uploader({
     console.error("Upload error:", error);
     toast.error(`Upload failed: ${error.message || "Unknown error"}`);
     setUploadProgress(null);
+    setUploadingCount(0);
   };
 
   return (
@@ -50,6 +55,7 @@ export default function Uploader({
           if (res && res.length > 0) {
             handleUploadComplete(res);
             setUploadProgress(null);
+            setUploadingCount(0);
             toast.success("Image uploaded successfully!");
             console.log("Upload complete response:", res); // Add this for debugging
           }
@@ -59,8 +65,12 @@ export default function Uploader({
           console.log("Upload progress:", progress);
           setUploadProgress(progress);
         }}
+        onUploadBegin={(name) => {
+          console.log("Upload beginning:", name);
+          setUploadingCount((prev) => prev + 1);
+        }}
         content={{
-          button({ ready }) {
+          button({ ready, isUploading }) {
             return (
               <span className="flex items-center ">
                 {uploadProgress !== null ? (
@@ -113,6 +123,9 @@ export default function Uploader({
           },
           allowedContent() {
             return null; // Hide allowed content text
+            <span className="text-xs text-gray-500">
+              Select up to {maxFileCount} images (max 4MB each)
+            </span>;
           },
         }}
       />

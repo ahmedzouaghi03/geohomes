@@ -44,10 +44,12 @@ export default function HouseCreator3({
 
   const handleImageUpload = (res: UploadResponse[]) => {
     if (res.length > 0) {
-      const uploadedImageUrl = res[0].url || res[0].ufsUrl || "";
-      const updatedImages = [...formData.images, uploadedImageUrl];
+      const uploadedImageUrls = res.map(
+        (file) => file.url || file.ufsUrl || ""
+      );
+      const updatedImages = [...formData.images, ...uploadedImageUrls];
       updateFormData({ images: updatedImages });
-      toast.success("Image uploaded successfully!");
+      toast.success(`${res.length} image(s) uploaded successfully!`);
     }
   };
 
@@ -344,7 +346,8 @@ export default function HouseCreator3({
 
         <FileUploader
           handleUploadComplete={handleImageUpload}
-          buttonText="Upload Image"
+          buttonText="Upload Multiple Images"
+          maxFileCount={10}
         />
       </div>
     </div>
