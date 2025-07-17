@@ -15,6 +15,7 @@ import {
 } from "@/actions/houseActions";
 import { House, HouseCategory, HouseType } from "@/types";
 import { Trash2, Edit, Calendar, Eye } from "lucide-react";
+import BackButton from "@/components/ui/BackButton";
 
 export default function AdminHousePage() {
   const [houses, setHouses] = useState<House[]>([]);
@@ -290,7 +291,13 @@ export default function AdminHousePage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">My Properties</h1>
+        <div className="flex">
+          <div className="mb-6">
+            <BackButton color="black" />
+          </div>
+          <h1 className="text-3xl font-bold">My Properties</h1>
+        </div>
+
         <Link
           href="/admin/house/createHouse"
           className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors"

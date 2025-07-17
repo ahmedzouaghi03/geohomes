@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { getCities, addCity, deleteCity } from "@/actions/cityActions";
 import { City, Governorat } from "@/types";
+import BackButton from "@/components/ui/BackButton";
 
 export default function CitiesPage() {
   const [cities, setCities] = useState<City[]>([]);
@@ -93,13 +94,17 @@ export default function CitiesPage() {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h1
-        className="text-2xl font-bold mb-6"
-        style={{ color: "var(--foreground)" }}
-      >
-        Manage Cities
-      </h1>
-
+      <div className="flex">
+        <div className="mb-6">
+          <BackButton color="black" />
+        </div>
+        <h1
+          className="text-2xl font-bold mb-6"
+          style={{ color: "var(--foreground)" }}
+        >
+          Manage Cities
+        </h1>
+      </div>
       {/* Add City Form */}
       <div
         className="rounded-lg shadow p-6 mb-8"

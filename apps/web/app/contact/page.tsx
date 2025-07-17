@@ -1,12 +1,18 @@
+import BackButton from "@/components/ui/BackButton";
 import React from "react";
 
 export default function ContactPage() {
   return (
     <main className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 py-4">
       <section className="w-full max-w-2xl bg-white rounded-lg shadow-md p-6 md:p-10">
-        <h1 className="text-3xl font-bold text-[#3A5FCD] mb-2 text-center">
-          Contactez-nous
-        </h1>
+        <div className="relative flex items-center justify-center mb-6">
+          <div className="absolute left-0">
+            <BackButton />
+          </div>
+          <h1 className="text-3xl font-bold text-[#3A5FCD] text-center">
+            Contactez-nous
+          </h1>
+        </div>
         <p className="text-gray-600 mb-8 text-center">
           Une question, une suggestion ou envie de nous contacter ? Remplissez
           le formulaire ci-dessous et notre équipe vous répondra dans les plus

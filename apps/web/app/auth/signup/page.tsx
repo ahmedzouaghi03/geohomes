@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
+import BackButton from "@/components/ui/BackButton";
 
 export default function AdminSignupPage() {
   const [formData, setFormData] = useState({
@@ -78,12 +79,15 @@ export default function AdminSignupPage() {
         }}
       >
         <div className="text-center">
-          <h2
-            className="mt-6 text-3xl font-bold"
-            style={{ color: "var(--foreground)" }}
-          >
-            Create Admin Account
-          </h2>
+          <div className="flex mt-6">
+            <BackButton color="black" />
+            <h2
+              className=" text-3xl font-bold"
+              style={{ color: "var(--foreground)" }}
+            >
+              Create Admin Account
+            </h2>
+          </div>
           <p
             className="mt-2 text-sm"
             style={{ color: "var(--muted-foreground)" }}

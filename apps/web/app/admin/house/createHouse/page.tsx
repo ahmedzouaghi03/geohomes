@@ -21,6 +21,7 @@ import {
   City,
   CreateHouseData,
 } from "@/types";
+import BackButton from "@/components/ui/BackButton";
 
 export const dynamic = "force-dynamic";
 
@@ -267,13 +268,17 @@ export default function CreateHousePage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1
-        className="text-3xl font-bold mb-8"
-        style={{ color: "var(--foreground)" }}
-      >
-        Add New Property
-      </h1>
-
+      <div className="flex">
+        <div className="mb-6">
+          <BackButton color="black" />
+        </div>
+        <h1
+          className="text-3xl font-bold mb-8"
+          style={{ color: "var(--foreground)" }}
+        >
+          Add New Property
+        </h1>
+      </div>
       {/* Step Indicator */}
       <div className="mb-12">
         <div className="flex items-center justify-between relative">

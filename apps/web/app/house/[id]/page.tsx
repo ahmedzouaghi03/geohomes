@@ -35,6 +35,7 @@ import {
   FaTree as Tree, // Garden types (garden - None/Normal/Gazon)
   FaWindowMaximize as Window, // Double Glazing (doubleVitrage)
 } from "react-icons/fa";
+import BackButton from "@/components/ui/BackButton";
 
 export default async function HouseDetailPage({
   params,
@@ -171,6 +172,10 @@ export default async function HouseDetailPage({
 
   return (
     <div className="max-w-6xl mx-auto py-8 px-4">
+      {/* Back Button */}
+      <div className="mb-6">
+        <BackButton />
+      </div>
       {/* Image Gallery */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <ImageGallery images={images} houseTitle={house.title} />

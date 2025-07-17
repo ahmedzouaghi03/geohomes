@@ -10,6 +10,7 @@ import { House, City, CreateHouseData, UpdateHouseData } from "@/types";
 import HouseCreator1 from "@/components/admin/HouseCreator1";
 import HouseCreator2 from "@/components/admin/HouseCreator2";
 import HouseCreator3 from "@/components/admin/HouseCreator3";
+import BackButton from "@/components/ui/BackButton";
 
 export default function EditHousePage() {
   const router = useRouter();
@@ -330,14 +331,11 @@ export default function EditHousePage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex">
+        <div className="mb-6">
+          <BackButton color="black" />
+        </div>
         <h1 className="text-3xl font-bold">Edit Property</h1>
-        <button
-          onClick={() => router.push("/admin/house")}
-          className="text-gray-600 hover:text-gray-800"
-        >
-          ← Back to Houses
-        </button>
       </div>
 
       {/* Step Indicator */}

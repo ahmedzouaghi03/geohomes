@@ -1,12 +1,18 @@
+import BackButton from "@/components/ui/BackButton";
 import React from "react";
 
 export default function AboutUsPage() {
   return (
     <main className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 py-8">
       <section className="w-full max-w-3xl bg-white rounded-lg shadow-md p-6 md:p-10">
-        <h1 className="text-3xl font-bold text-[#3A5FCD] mb-4 text-center">
-          À propos de nous
-        </h1>
+        <div className="relative flex items-center justify-center mb-6">
+          <div className="absolute left-0">
+            <BackButton />
+          </div>
+          <h1 className="text-3xl font-bold text-[#3A5FCD] mb-4 text-center">
+            À propos de nous
+          </h1>
+        </div>
         <p className="text-gray-700 mb-6 text-center text-lg">
           Bienvenue sur House Location, votre partenaire de confiance pour
           trouver, vendre et louer des biens immobiliers en Tunisie.

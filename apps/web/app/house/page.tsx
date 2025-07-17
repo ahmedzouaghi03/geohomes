@@ -3,6 +3,7 @@ import { db } from "@monkeyprint/db";
 import HouseList from "@/components/house/HouseList";
 import { getHouses, clearExpiredHouseDates } from "@/actions/houseActions";
 import { House, HouseCategory, HouseType } from "@/types";
+import BackButton from "@/components/ui/BackButton";
 
 export const dynamic = "force-dynamic";
 
@@ -92,16 +93,21 @@ export default async function HousePage({
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">
-        Annonces Immobilières
-        {category === "VENTE"
-          ? " - À Vendre"
-          : category === "LOCATION"
-            ? " - À Louer"
-            : category === "LOCATION_VACANCES"
-              ? " - Locations Vacances"
-              : ""}
-      </h1>
+      <div className="flex">
+        <div className="mb-6">
+          <BackButton />
+        </div>
+        <h1 className="text-3xl font-bold mb-8">
+          Annonces Immobilières
+          {category === "VENTE"
+            ? " - À Vendre"
+            : category === "LOCATION"
+              ? " - À Louer"
+              : category === "LOCATION_VACANCES"
+                ? " - Locations Vacances"
+                : ""}
+        </h1>
+      </div>
 
       <Suspense fallback={<div>Loading...</div>}>
         <HouseList
