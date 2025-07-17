@@ -18,8 +18,19 @@ import {
   GardenType,
 } from "@/types";
 
+import { clearExpiredHouseDates } from "@/actions/houseActions";
+
 // Server-side data fetching for the home page
 async function getHomePageData() {
+  // Clear expired house dates first
+  try {
+    const result = await clearExpiredHouseDates();
+    if (result.success && result.count && result.count > 0) {
+      console.log(`Cleared ${result.count} expired house dates`);
+    }
+  } catch (error) {
+    console.error("Error clearing expired dates:", error);
+  }
   // Fetch all cities for search filter
   const citiesRaw = await db.city.findMany({ orderBy: { name: "asc" } });
   const cities: City[] = citiesRaw.map((city) => ({

@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { db } from "@monkeyprint/db";
 import HouseList from "@/components/house/HouseList";
-import { getHouses } from "@/actions/houseActions";
+import { getHouses, clearExpiredHouseDates } from "@/actions/houseActions";
 import { House, HouseCategory, HouseType } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -40,6 +40,15 @@ export default async function HousePage({
   searchParams: Promise<SearchParams>;
 }) {
   const params = await searchParams;
+  // Clear expired house dates first
+  try {
+    const result = await clearExpiredHouseDates();
+    if (result.success && result.count && result.count > 0) {
+      console.log(`Cleared ${result.count} expired house dates`);
+    }
+  } catch (error) {
+    console.error("Error clearing expired dates:", error);
+  }
   // Parse search parameters
   const page = params.page ? parseInt(params.page as string) : 1;
   const category = params.category as HouseCategory | undefined;

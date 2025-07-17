@@ -497,3 +497,59 @@ export async function hardDeleteHouse(id: string) {
     };
   }
 }
+
+export async function clearExpiredHouseDates() {
+  try {
+    const now = new Date();
+
+    // Find houses where endDate has passed
+    const expiredHouses = await db.house.findMany({
+      where: {
+        endDate: {
+          lt: now, // endDate is less than current time
+        },
+        isDeleted: false,
+      },
+      select: {
+        id: true,
+        title: true,
+        endDate: true,
+      },
+    });
+
+    if (expiredHouses.length === 0) {
+      return { success: true, message: "No expired dates found", count: 0 };
+    }
+
+    // Update houses to clear their dates
+    const updateResult = await db.house.updateMany({
+      where: {
+        endDate: {
+          lt: now,
+        },
+        isDeleted: false,
+      },
+      data: {
+        startDate: null,
+        endDate: null,
+      },
+    });
+
+    return {
+      success: true,
+      message: `Cleared dates for ${updateResult.count} houses`,
+      count: updateResult.count,
+      clearedHouses: expiredHouses.map((h) => ({
+        id: h.id,
+        title: h.title,
+        expiredDate: h.endDate,
+      })),
+    };
+  } catch (error) {
+    console.error("Error clearing expired house dates:", error);
+    return {
+      success: false,
+      error: "Failed to clear expired house dates",
+    };
+  }
+}

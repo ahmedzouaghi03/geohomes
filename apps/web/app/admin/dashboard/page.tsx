@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
 import { getCurrentUser } from "@/actions/authActions";
-import { getHouses } from "@/actions/houseActions";
+import { getHouses, clearExpiredHouseDates } from "@/actions/houseActions";
 import { House, HouseCategory, HouseType, Admin } from "@/types";
 import {
   Eye,
@@ -45,6 +45,31 @@ export default function AdminDashboard() {
     initializeDashboard();
   }, []);
 
+  useEffect(() => {
+    // Check for expired dates when component mounts
+    const checkExpiredDates = async () => {
+      try {
+        const result = await clearExpiredHouseDates();
+        if (result.success && result.count && result.count > 0) {
+          toast.success(`Cleared ${result.count} expired house dates`);
+          // Refresh the houses list
+          const admin = await getCurrentUser();
+          if (admin?.id) {
+            const housesResult = await getHouses({
+              adminId: admin.id,
+              page: 1,
+              limit: 1000,
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error checking expired dates:", error);
+      }
+    };
+
+    checkExpiredDates();
+  }, []);
+
   const initializeDashboard = async () => {
     try {
       setLoading(true);
@@ -62,7 +87,7 @@ export default function AdminDashboard() {
       const result = await getHouses({
         adminId: admin.id,
         page: 1,
-        limit: 1000, // Get all houses
+        limit: 1000,
       });
 
       if (result.success) {
