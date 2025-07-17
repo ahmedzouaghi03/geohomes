@@ -123,8 +123,8 @@ export interface House {
   prixMin?: number;
   prixMax?: number;
 
-  startDate?: string | Date;
-  endDate?: string | Date;
+  startDate?: string | Date | null;
+  endDate?: string | Date | null;
 
   phoneNumbers: string[];
 
@@ -228,8 +228,13 @@ export interface CreateHouseData {
 
 // Interface for updating a house
 export interface UpdateHouseData
-  extends Partial<Omit<CreateHouseData, "position" | "options">> {
+  extends Partial<
+    Omit<CreateHouseData, "position" | "options" | "startDate" | "endDate">
+  > {
   id: string;
   position?: Partial<CreateHousePositionData>;
   options?: Partial<CreateHouseOptionsData>;
+  // Override date fields to allow null for clearing
+  startDate?: Date | null;
+  endDate?: Date | null;
 }
