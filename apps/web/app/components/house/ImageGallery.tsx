@@ -47,14 +47,16 @@ export default function ImageGallery({
     <>
       {/* Main Gallery Grid */}
       <div className="md:col-span-2">
-        <div className="relative w-full h-80 rounded-lg overflow-hidden cursor-pointer group">
+        <div
+          className="relative w-full h-80 rounded-lg overflow-hidden cursor-pointer group"
+          onClick={() => openVerticalSlider(0)}
+        >
           <Image
             src={images[0]}
             alt={houseTitle}
             fill
             className="object-cover transition-transform group-hover:scale-105"
             priority
-            onClick={() => openVerticalSlider(0)}
           />
           <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
             <span className="text-white text-lg font-medium">
