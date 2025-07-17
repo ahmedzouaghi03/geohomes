@@ -130,6 +130,12 @@ export default function AdminLoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <Link
+                href="/auth/forgetPassword"
+                className="text-sm font-medium text-primary-blue hover:opacity-80 transition-opacity"
+              >
+                Forgot password?
+              </Link>
             </div>
           </div>
 
