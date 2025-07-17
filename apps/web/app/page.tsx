@@ -171,7 +171,7 @@ export default async function Home() {
           <FeaturedListings
             listings={listings}
             totalCounts={totalCounts}
-            initialCategory={HouseCategory.LOCATION}
+            initialCategory={HouseCategory.LOCATION_VACANCES}
           />
           <PopularCities cities={popularCities} />
         </div>
