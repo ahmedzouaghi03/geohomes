@@ -4,6 +4,8 @@ import { House } from "@/types";
 import ContactForm from "@/components/house/ContactForm";
 import HouseMapWrapper from "@/components/house/HouseMapWrapper";
 import ImageGallery from "@/components/house/ImageGallery";
+import { Metadata } from "next";
+import BackButton from "@/components/ui/BackButton";
 import {
   //Pool, // Swimming Pool (piscine)
   Waves, // Waterfront (piedDansEau)
@@ -35,7 +37,52 @@ import {
   FaTree as Tree, // Garden types (garden - None/Normal/Gazon)
   FaWindowMaximize as Window, // Double Glazing (doubleVitrage)
 } from "react-icons/fa";
-import BackButton from "@/components/ui/BackButton";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const result = await getHouseById(id);
+
+  if (!result.success) {
+    return {
+      title: "Propriété non trouvée - Sousse Planner",
+      description: "Cette propriété n'existe pas ou n'est plus disponible.",
+    };
+  }
+
+  const house = result.data as House;
+  const categoryText = house.category === "VENTE" ? "Vente" : "Location";
+  const typeText = house.type === "MAISON" ? "Maison" : "Appartement";
+  const cityName = house.position?.city?.name || "Sousse";
+
+  return {
+    title: `${categoryText} ${typeText} ${cityName} - ${house.title} | Sousse Planner`,
+    description: `${categoryText} ${typeText} à ${cityName}. ${house.rooms} chambres, ${house.bathrooms} salles de bain. ${house.area ? `${house.area}m². ` : ""}Prix: ${house.prixMin ? `${house.prixMin.toLocaleString()} TND` : "Sur demande"}.`,
+    keywords: `${categoryText.toLowerCase()} ${typeText.toLowerCase()} ${cityName.toLowerCase()}, immobilier ${cityName.toLowerCase()}, propriété ${cityName.toLowerCase()}, ${house.rooms} chambres ${cityName.toLowerCase()}`,
+    alternates: {
+      canonical: `https://sousseplanner.com/house/${id}`,
+    },
+    openGraph: {
+      title: `${categoryText} ${typeText} ${cityName} - ${house.title}`,
+      description: `${house.rooms} chambres • ${house.bathrooms} SDB${house.area ? ` • ${house.area}m²` : ""}`,
+      images:
+        house.images.length > 0 ? [house.images[0]] : ["/images/sousse1.jpg"],
+      url: `https://sousseplanner.com/house/${id}`,
+      type: "website",
+      siteName: "Sousse Planner",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${categoryText} ${typeText} ${cityName} - ${house.title}`,
+      description: `${house.rooms} chambres • ${house.bathrooms} SDB${house.area ? ` • ${house.area}m²` : ""}`,
+      images:
+        house.images.length > 0 ? [house.images[0]] : ["/images/sousse1.jpg"],
+    },
+  };
+}
 
 export default async function HouseDetailPage({
   params,
@@ -176,6 +223,52 @@ export default async function HouseDetailPage({
       <div className="mb-6">
         <BackButton />
       </div>
+      {/* Add structured data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "RealEstateListing",
+            name: house.title,
+            description:
+              house.description ||
+              `${house.type} à ${house.position?.city?.name || "Sousse"}`,
+            url: `https://sousseplanner.com/house/${id}`,
+            image: house.images,
+            offers: {
+              "@type": "Offer",
+              price: house.prixMin || 0,
+              priceCurrency: "TND",
+              availability: "https://schema.org/InStock",
+              priceValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+                .toISOString()
+                .split("T")[0],
+            },
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: house.position?.city?.name || "Sousse",
+              addressCountry: "TN",
+            },
+            geo: house.position?.mapPosition
+              ? {
+                  "@type": "GeoCoordinates",
+                  latitude: house.position.mapPosition.split(",")[0],
+                  longitude: house.position.mapPosition.split(",")[1],
+                }
+              : undefined,
+            numberOfRooms: house.rooms,
+            numberOfBathroomsTotal: house.bathrooms,
+            floorSize: house.area
+              ? {
+                  "@type": "QuantitativeValue",
+                  value: house.area,
+                  unitCode: "MTK",
+                }
+              : undefined,
+          }),
+        }}
+      />
       {/* Image Gallery */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <ImageGallery images={images} houseTitle={house.title} />

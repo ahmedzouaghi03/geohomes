@@ -17,6 +17,7 @@ import {
   HeatingType,
   GardenType,
 } from "@/types";
+import { Metadata } from "next";
 
 import { clearExpiredHouseDates } from "@/actions/houseActions";
 
@@ -181,3 +182,21 @@ export default async function Home() {
     </div>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Location Maison Sousse | Vente Appartement Sousse - Sousse Planner",
+  description:
+    "🏠 Trouvez votre maison ou appartement à Sousse. +200 propriétés disponibles. Location, vente, location vacances. Meilleurs prix garantis!",
+  keywords:
+    "location maison sousse, vente appartement sousse, immobilier sousse, location vacances sousse, maison à louer sousse, appartement vente sousse",
+  alternates: {
+    canonical: "https://sousseplanner.com",
+  },
+  openGraph: {
+    title: "Location Maison Sousse | Vente Appartement Sousse",
+    description:
+      "Découvrez +200 propriétés à Sousse. Location, vente, vacances.",
+    url: "https://sousseplanner.com",
+    images: ["/images/sousse1.jpg"],
+  },
+};
