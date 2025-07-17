@@ -66,16 +66,19 @@ export default function FeaturedListings({
 
   return (
     <section className="mb-12">
-      <div className="flex justify-between items-center mb-6">
+      {/* Mobile-first responsive layout */}
+      <div className="flex flex-col space-y-4 mb-6 md:flex-row md:justify-between md:items-center md:space-y-0">
         <h2 className="text-2xl font-bold">
           {totalCounts[selectedCategory]?.toLocaleString("fr-FR") ?? 0} biens
           immobiliers
         </h2>
-        <div className="flex space-x-4">
+
+        {/* Responsive button container */}
+        <div className="flex flex-wrap gap-2 md:gap-4">
           {Object.values(HouseCategory).map((cat) => (
             <button
               key={cat}
-              className={`px-4 py-2 rounded-md cursor-pointer ${
+              className={`px-3 py-2 text-sm rounded-md cursor-pointer transition-colors md:px-4 md:text-base ${
                 selectedCategory === cat
                   ? "bg-[#3A5FCD] text-white hover:bg-[#193997]"
                   : "border border-gray-300 hover:bg-gray-100"
