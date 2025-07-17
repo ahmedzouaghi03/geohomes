@@ -27,7 +27,7 @@ export default function FeaturedListings({
 
   // Filter listings by selected category
   const filteredListings = listings.filter(
-    (l) => l.category === selectedCategory
+    (l) => l.category === selectedCategory && !l.isDeleted
   );
 
   // Check if house is occupied
