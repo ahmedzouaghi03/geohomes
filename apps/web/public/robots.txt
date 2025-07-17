@@ -1,0 +1,28 @@
+# Allow all search engines to crawl the site
+User-agent: *
+Allow: /
+
+# Block sensitive areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /auth/
+Disallow: /actions/
+Disallow: /_next/
+Disallow: /favicon.ico
+Disallow: /components/
+Disallow: /lib/
+Disallow: /utils/
+Disallow: /types/
+Disallow: /hooks/
+Disallow: /middleware/
+Disallow: /middleware.ts/
+Disallow: /config/
+
+# Block specific files that don't need indexing
+Disallow: /*.json$
+Disallow: /temp/
+Disallow: /uploads/temp/
+
+# Tell search engines where to find the sitemap
+Sitemap: https://sousseplanner.com/sitemap.xml
+
