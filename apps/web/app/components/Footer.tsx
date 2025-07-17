@@ -40,7 +40,7 @@ export default function Footer() {
           <div>
             <h4 className="font-bold mb-4">Contact Us</h4>
             <p className="text-gray-400">Email: contact@sousseplanner.com</p>
-            <p className="text-gray-400">Phone: +216 29 389 994</p>
+            <p className="text-gray-400">Phone: +216 53 363 243</p>
           </div>
         </div>
 
