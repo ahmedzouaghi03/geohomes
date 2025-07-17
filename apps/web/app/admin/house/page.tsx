@@ -7,7 +7,12 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { toast } from "react-hot-toast";
 import { getCurrentUser } from "@/actions/authActions";
-import { getHouses, deleteHouse, updateHouse } from "@/actions/houseActions";
+import {
+  getHouses,
+  deleteHouse,
+  updateHouse,
+  clearExpiredHouseDates,
+} from "@/actions/houseActions";
 import { House, HouseCategory, HouseType } from "@/types";
 import { Trash2, Edit, Calendar, Eye } from "lucide-react";
 
@@ -23,6 +28,31 @@ export default function AdminHousePage() {
 
   useEffect(() => {
     fetchAdminHouses();
+  }, []);
+
+  useEffect(() => {
+    // Check for expired dates when component mounts
+    const checkExpiredDates = async () => {
+      try {
+        const result = await clearExpiredHouseDates();
+        if (result.success && result.count && result.count > 0) {
+          toast.success(`Cleared ${result.count} expired house dates`);
+          // Refresh the houses list
+          const admin = await getCurrentUser();
+          if (admin?.id) {
+            const housesResult = await getHouses({
+              adminId: admin.id,
+              page: 1,
+              limit: 1000,
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error checking expired dates:", error);
+      }
+    };
+
+    checkExpiredDates();
   }, []);
 
   const fetchAdminHouses = async () => {
@@ -80,8 +110,8 @@ export default function AdminHousePage() {
 
   const handleEditDates = (
     houseId: string,
-    startDate?: Date | string,
-    endDate?: Date | string
+    startDate?: Date | string | null,
+    endDate?: Date | string | null
   ) => {
     setEditingDates(houseId);
     setTempDates({
@@ -126,6 +156,101 @@ export default function AdminHousePage() {
   const handleCancelDateEdit = () => {
     setEditingDates(null);
     setTempDates({});
+  };
+
+  const handleClearDates = (houseId: string) => {
+    toast.custom(
+      (t) => (
+        <div className="bg-white p-6 rounded-lg shadow-xl border max-w-md mx-auto">
+          <div className="flex items-center mb-4">
+            <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-3">
+              <Trash2 className="w-5 h-5 text-red-600" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">
+                Clear Availability Dates
+              </h3>
+              <p className="text-sm text-gray-500">
+                This action cannot be undone
+              </p>
+            </div>
+          </div>
+          <p className="text-gray-600 mb-6">
+            Are you sure you want to clear the dates? This will make the
+            property available immediately.
+          </p>
+          <div className="flex gap-3">
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                toast.dismiss(t.id);
+                performClearDates(houseId);
+              }}
+              className="flex-1 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+            >
+              Clear Dates
+            </button>
+          </div>
+        </div>
+      ),
+      {
+        duration: Infinity,
+        position: "top-center",
+        style: {
+          background: "transparent",
+          boxShadow: "none",
+        },
+      }
+    );
+  };
+
+  const performClearDates = async (houseId: string) => {
+    try {
+      const result = await updateHouse({
+        id: houseId,
+        startDate: null, // Use null instead of undefined
+        endDate: null, // Use null instead of undefined
+      });
+
+      if (result.success) {
+        toast.success("Dates cleared successfully", {
+          icon: "✅",
+          duration: 3000,
+        });
+
+        // Update local state with null values
+        setHouses((prev) =>
+          prev.map((house) =>
+            house.id === houseId
+              ? {
+                  ...house,
+                  startDate: null,
+                  endDate: null,
+                }
+              : house
+          )
+        );
+
+        // If we're in editing mode, exit it
+        if (editingDates === houseId) {
+          setEditingDates(null);
+          setTempDates({});
+        }
+      } else {
+        throw new Error(result.error);
+      }
+    } catch (error) {
+      console.error("Failed to clear dates:", error);
+      toast.error("Failed to clear dates", {
+        icon: "❌",
+        duration: 4000,
+      });
+    }
   };
 
   const formatPrice = (price?: number) => {
@@ -340,6 +465,12 @@ export default function AdminHousePage() {
                             Save
                           </button>
                           <button
+                            onClick={() => handleClearDates(house.id)}
+                            className="text-red-600 hover:text-red-700 px-3 py-1 text-sm border border-red-600 rounded hover:bg-red-50 transition-colors"
+                          >
+                            Clear
+                          </button>
+                          <button
                             onClick={handleCancelDateEdit}
                             className="text-gray-600 hover:text-gray-700 px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 transition-colors"
                           >
@@ -358,19 +489,30 @@ export default function AdminHousePage() {
                                 ? `Until ${new Date(house.endDate).toLocaleDateString()}`
                                 : "No dates set"}
                         </span>
-                        <button
-                          onClick={() =>
-                            handleEditDates(
-                              house.id,
-                              house.startDate,
-                              house.endDate
-                            )
-                          }
-                          className="text-blue-600 hover:text-blue-700 p-1"
-                          title="Edit availability dates"
-                        >
-                          <Calendar size={16} />
-                        </button>
+                        <div className="flex gap-1">
+                          <button
+                            onClick={() =>
+                              handleEditDates(
+                                house.id,
+                                house.startDate,
+                                house.endDate
+                              )
+                            }
+                            className="text-blue-600 hover:text-blue-700 p-1"
+                            title="Edit availability dates"
+                          >
+                            <Calendar size={16} />
+                          </button>
+                          {(house.startDate || house.endDate) && (
+                            <button
+                              onClick={() => handleClearDates(house.id)}
+                              className="text-red-600 hover:text-red-700 p-1"
+                              title="Clear dates"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
