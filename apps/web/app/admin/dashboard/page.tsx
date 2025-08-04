@@ -448,8 +448,13 @@ export default function AdminDashboard() {
                           `, ${house.position.address}`}
                       </span>
                     </div>
-
-                    <div className="flex items-center justify-between text-sm text-gray-600 mb-3">
+                    <div
+                      className={`items-center justify-between text-sm text-gray-600 mb-3 ${
+                        house.category === HouseCategory.VENTE
+                          ? "flex"
+                          : "hidden"
+                      }`}
+                    >
                       <span>{getTypeLabel(house.type)}</span>
                       <span>{house.area || "N/A"} m²</span>
                       <span>{house.rooms} pièces</span>

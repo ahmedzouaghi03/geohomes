@@ -8,6 +8,7 @@ import {
   GardenType,
   HeatingType,
   CreateHouseData,
+  HouseCategory,
 } from "@/types";
 import {
   //Pool, // Swimming Pool (piscine)
@@ -55,6 +56,7 @@ import {
 } from "react-icons/fa";
 interface HouseCreator2Props {
   formData: {
+    category: HouseCategory;
     type: HouseType;
     area?: number;
     rooms: number;

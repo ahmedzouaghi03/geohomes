@@ -227,7 +227,12 @@ export default function EditHousePage() {
     }
 
     if (currentStep < 3) {
-      setCurrentStep((prev) => prev + 1);
+      if (formData?.category !== "VENTE") {
+        setCurrentStep((prev) => prev + 2);
+      } else {
+        setCurrentStep((prev) => prev + 1);
+      }
+
       window.scrollTo(0, 0);
     }
   };
@@ -235,7 +240,12 @@ export default function EditHousePage() {
   // Navigate to previous step
   const handleBack = () => {
     if (currentStep > 1) {
-      setCurrentStep((prev) => prev - 1);
+      if (formData?.category !== "VENTE") {
+        setCurrentStep((prev) => prev - 2);
+      } else {
+        setCurrentStep((prev) => prev - 1);
+      }
+
       window.scrollTo(0, 0);
     }
   };

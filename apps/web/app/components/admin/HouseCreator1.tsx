@@ -528,7 +528,11 @@ export default function HouseCreator1({
         </div>
 
         {/* House State Selection */}
-        <div className="space-y-2">
+        <div
+          className={`space-y-2  ${
+            formData.category === HouseCategory.VENTE ? "" : "hidden"
+          }`}
+        >
           <label
             htmlFor="state"
             className="block text-sm font-medium"

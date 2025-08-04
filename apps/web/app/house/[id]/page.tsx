@@ -287,15 +287,17 @@ export default async function HouseDetailPage({
       {/* House Info */}
       <div className="mb-4">
         <h1 className="text-2xl font-bold mb-2">{house.title}</h1>
-        <div className="flex flex-wrap gap-4 text-gray-700 mb-2">
-          <span>📐 {house.area || "N/A"} m²</span>
-          <span>🛏️ {house.rooms} Pièces</span>
-          <span>🛌 {house.rooms} Chambres</span>
-          <span>🚿 {house.bathrooms} Salles de bains</span>
+        <div
+          className={`flex-wrap gap-4 text-gray-700 mb-2 ${
+            house.category === "VENTE" ? "flex" : "hidden"
+          }`}
+        >
+          {house.area && <span>📐 {house.area || "N/A"} m²</span>}
+          {house.rooms && <span>🛏️ {house.rooms} Chambres</span>}
+          {house.bathrooms && <span>🚿 {house.bathrooms} Salles de bains</span>}
         </div>
         <div className="text-blue-700 mb-2">
-          📍 {house.position?.city?.name || "N/A"},{" "}
-          {house.position?.address || "N/A"}
+          📍 {house.position?.city?.name}, {house.position?.address}
         </div>
       </div>
 
@@ -335,28 +337,30 @@ export default async function HouseDetailPage({
         </div>
       )}
 
-      <div className="mb-4">
-        <span className="font-semibold">Description:</span>
-        <p>{house.description}</p>
-      </div>
-
-      <div className="mb-6">
-        <span className="font-semibold">Extras :</span>
-        <div className="flex flex-wrap gap-6 mt-2">
-          {getEnabledExtras(house.options).length === 0 ? (
-            <span>Aucun extra</span>
-          ) : (
-            getEnabledExtras(house.options).map((extra) => (
-              <div
-                key={extra.key}
-                className="flex items-center gap-2 w-56 text-gray-700"
-              >
-                <span className="text-blue-700">{extra.icon}</span>
-                <span>{extra.label}</span>
-              </div>
-            ))
-          )}
+      {house.description && (
+        <div className="mb-4">
+          <span className="font-semibold">Description:</span>
+          <p>{house.description}</p>
         </div>
+      )}
+
+      <div className={`mb-6 ${house.category === "VENTE" ? "" : "hidden"}`}>
+        {getEnabledExtras(house.options).length > 0 && (
+          <div>
+            <span className="font-semibold">Extras :</span>
+            <div className="flex flex-wrap gap-6 mt-2">
+              {getEnabledExtras(house.options).map((extra) => (
+                <div
+                  key={extra.key}
+                  className="flex items-center gap-2 w-56 text-gray-700"
+                >
+                  <span className="text-blue-700">{extra.icon}</span>
+                  <span>{extra.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Map Section */}

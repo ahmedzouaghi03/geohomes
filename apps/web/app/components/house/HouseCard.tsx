@@ -254,7 +254,7 @@ Merci!`;
         </div>
 
         {/* Wishlist button */}
-        <div className="absolute top-4 right-4 z-10">
+        <div className="absolute hidden top-4 right-4 z-10">
           <button
             className="bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
             onClick={() => setShowWishlistModal(true)}
@@ -282,13 +282,19 @@ Merci!`;
         </div>
 
         {/* Property details */}
-        <div className="flex flex-wrap gap-4 text-sm mb-2">
+        <div
+          className={`flex-wrap gap-4 text-sm mb-2 ${
+            house.category === "VENTE" ? "flex" : "hidden"
+          }`}
+        >
+          {/*nzid flex ki ena7i hidden*/}
           <span>📐 {house.area || "N/A"} m²</span>
           <span>🛏️ {house.rooms} Pièces</span>
           <span>🛌 {house.bathrooms} Chambres</span>
         </div>
 
-        <div className="flex flex-wrap gap-4 text-sm mb-2">
+        <div className="flex-wrap gap-4 text-sm mb-2 hidden">
+          {/*nzid flex ki ena7i hidden*/}
           <span>🚿 {house.bathrooms} Salles de bains</span>
         </div>
 
@@ -305,7 +311,8 @@ Merci!`;
         )}
 
         {/* Extras */}
-        <div className="flex flex-wrap gap-2 text-sm mb-2">
+        <div className="flex-wrap gap-2 text-sm mb-2 hidden">
+          {/*ki ena7i hidden nzid flex*/}
           {displayedExtras.map((extra, idx) => (
             <span key={idx} className="bg-gray-100 px-2 py-1 rounded">
               {extra}
@@ -319,7 +326,7 @@ Merci!`;
         </div>
 
         {/* House type */}
-        <div className="flex flex-col gap-2 mt-4">
+        <div className="mt-4">
           <div className="badge bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-800 w-max mx-auto">
             {houseTypeMap[house.type] || house.type}
           </div>

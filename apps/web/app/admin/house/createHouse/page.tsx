@@ -202,7 +202,12 @@ export default function CreateHousePage() {
     }
 
     if (currentStep < 3) {
-      setCurrentStep((prev) => prev + 1);
+      if (formData.category !== "VENTE") {
+        setCurrentStep((prev) => prev + 2);
+      } else {
+        setCurrentStep((prev) => prev + 1);
+      }
+
       // Only scroll if component is mounted (client-side)
       if (isMounted && typeof window !== "undefined") {
         window.scrollTo(0, 0);
@@ -213,7 +218,12 @@ export default function CreateHousePage() {
   // Navigate to previous step
   const handleBack = () => {
     if (currentStep > 1) {
-      setCurrentStep((prev) => prev - 1);
+      if (formData.category !== "VENTE") {
+        setCurrentStep((prev) => prev - 2);
+      } else {
+        setCurrentStep((prev) => prev - 1);
+      }
+
       // Only scroll if component is mounted (client-side)
       if (isMounted && typeof window !== "undefined") {
         window.scrollTo(0, 0);
@@ -248,7 +258,7 @@ export default function CreateHousePage() {
         toast.success("Redirecting...");
         setTimeout(() => {
           // Use Next.js router instead of window.location.reload()
-          router.push("/admin/dashboard");
+          router.push("/admin/house");
         }, 1500);
       } else {
         throw new Error(result.error);

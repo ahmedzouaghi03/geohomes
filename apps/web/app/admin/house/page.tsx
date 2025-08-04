@@ -384,9 +384,12 @@ export default function AdminHousePage() {
                 <div className="mb-4">
                   <h2 className="text-xl font-bold mb-2">{house.title}</h2>
                   <div className="flex items-center text-gray-600 mb-2">
-                    <span>📍 {house.position?.city?.name || "N/A"}</span>
-                    {house.position?.address && (
-                      <span className="ml-2">• {house.position.address}</span>
+                    {house.position?.address ? (
+                      <span className="">
+                        📍{house.position.city?.name}, {house.position.address}
+                      </span>
+                    ) : (
+                      <span>📍{house.position?.city?.name || "N/A"}</span>
                     )}
                   </div>
                   <div className="text-lg font-semibold text-blue-600 mb-3">
@@ -395,7 +398,12 @@ export default function AdminHousePage() {
                 </div>
 
                 {/* Property Details */}
-                <div className="grid grid-cols-2 gap-4 mb-4">
+                <div
+                  className={`grid-cols-2 gap-4 mb-4 ${
+                    house.category === HouseCategory.VENTE ? "grid" : "hidden"
+                  }`}
+                >
+                  {/*nzid grid ki ena7i hidden */}
                   <div className="text-sm">
                     <span className="text-gray-500">Type:</span>
                     <div className="font-medium">

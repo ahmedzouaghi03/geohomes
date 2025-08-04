@@ -3,12 +3,13 @@
 import React from "react";
 import FileUploader from "@/components/admin/FileUploader";
 import { toast } from "react-hot-toast";
-import { CreateHouseData } from "@/types";
+import { CreateHouseData, HouseCategory } from "@/types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 interface HouseCreator3Props {
   formData: {
+    category: HouseCategory;
     title: string;
     description?: string;
     prixMin?: number;
@@ -124,7 +125,9 @@ export default function HouseCreator3({
 
       {/* Price Information */}
       <div
-        className="pt-6 border-t border-gray-200"
+        className={`pt-6 border-t border-gray-200 ${
+          formData.category === HouseCategory.VENTE ? "" : "hidden"
+        }`}
         style={{ borderColor: "var(--border)" }}
       >
         <h3
@@ -210,7 +213,7 @@ export default function HouseCreator3({
 
       {/* Availability Period - with react-datepicker */}
       <div
-        className="pt-6 border-t border-gray-200"
+        className="pt-6 border-t border-gray-200 hidden lg:block"
         style={{ borderColor: "var(--border)" }}
       >
         <h3
