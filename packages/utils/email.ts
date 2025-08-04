@@ -145,7 +145,7 @@ export async function sendContactFormEmail({
     // Add footer
     htmlContent += `
         <div style="border-top: 1px solid #eee; padding-top: 15px; margin-top: 20px; font-size: 12px; color: #777;">
-          <p>This message was sent through the contact form on your ${storeName || "Monkey Print"} store.</p>
+          <p>This message was sent through the contact form on your ${storeName || "Sousse Planner"} store.</p>
           ${storeId ? `<p>Store ID: ${storeId}</p>` : ""}
           <p>You can reply directly to this email to respond to the customer.</p>
         </div>
@@ -154,7 +154,7 @@ export async function sendContactFormEmail({
 
     // Send the email
     const emailResult = await resend.emails.send({
-      from: "Monkey Print <onboarding@resend.dev>",
+      from: "Sousse Planner <onboarding@resend.dev>",
       to: recipient,
       subject: `[Contact Form] ${subject}`,
       html: htmlContent,
