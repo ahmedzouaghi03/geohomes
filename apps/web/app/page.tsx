@@ -165,10 +165,15 @@ export default async function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-grow">
-        <SearchSection cities={cities} />
+        <div className="hidden lg:block">
+          <SearchSection cities={cities} />
+        </div>
 
         <div className="container mx-auto px-4 py-8">
-          <PropertyTypes typeCounts={typeCounts} />
+          <div className="hidden lg:block">
+            <PropertyTypes typeCounts={typeCounts} />
+          </div>
+
           <FeaturedListings
             listings={listings}
             totalCounts={totalCounts}
