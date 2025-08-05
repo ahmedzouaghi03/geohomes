@@ -426,6 +426,8 @@ export async function updateHouse(data: UpdateHouseData) {
 
     revalidatePath(`/houses/${id}`);
     revalidatePath("/houses");
+    revalidatePath("/");
+    revalidateTag("houses");
 
     return { success: true, data: house };
   } catch (error) {
@@ -456,6 +458,8 @@ export async function deleteHouse(id: string) {
     });
 
     revalidatePath("/houses");
+    revalidatePath("/");
+    revalidateTag("houses");
 
     return { success: true };
   } catch (error) {
@@ -489,6 +493,8 @@ export async function hardDeleteHouse(id: string) {
     });
 
     revalidatePath("/houses");
+    revalidatePath("/");
+    revalidateTag("houses");
 
     return { success: true };
   } catch (error) {
