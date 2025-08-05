@@ -7,6 +7,7 @@ import {
   HouseState,
   Governorat,
   CreateHouseData,
+  LocationType,
 } from "@/types";
 import { City } from "@monkeyprint/db";
 import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
@@ -68,6 +69,7 @@ interface HouseCreator1Props {
     category: HouseCategory;
     type: HouseType;
     state?: HouseState;
+    locationType?: LocationType;
     position: {
       governorat: Governorat;
       cityId: string;
@@ -499,6 +501,34 @@ export default function HouseCreator1({
             </option>
           </select>
         </div>
+
+        {/* Location Type Selection - Only for LOCATION category */}
+        {formData.category === HouseCategory.LOCATION && (
+          <div className="space-y-2">
+            <label
+              htmlFor="locationType"
+              className="block text-sm font-medium"
+              style={{ color: "var(--foreground)" }}
+            >
+              Location Type
+            </label>
+            <select
+              id="locationType"
+              name="locationType"
+              value={formData.locationType || ""}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+              style={{
+                borderColor: "var(--input)",
+                color: "var(--foreground)",
+              }}
+            >
+              <option value="">Select location type (optional)</option>
+              <option value={LocationType.Annuelle}>Annuelle</option>
+              <option value={LocationType.Scolaire}>Scolaire</option>
+            </select>
+          </div>
+        )}
 
         {/* House Type Selection */}
         <div className="space-y-2">

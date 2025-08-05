@@ -57,6 +57,10 @@ const HouseCard: React.FC<HouseCardProps> = ({ house }) => {
       case "VENTE":
         return "À Vendre";
       case "LOCATION":
+        // Add location type if available
+        if (house.locationType) {
+          return `À Louer - ${house.locationType}`;
+        }
         return "À Louer";
       case "LOCATION_VACANCES":
         return "Location Vacances";
@@ -280,6 +284,14 @@ Merci!`;
             {house.position?.address || "N/A"}
           </span>
         </div>
+
+        {house.category === "LOCATION" && house.locationType && (
+          <div className="mb-2">
+            <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+              Location {house.locationType}
+            </span>
+          </div>
+        )}
 
         {/* Property details */}
         <div

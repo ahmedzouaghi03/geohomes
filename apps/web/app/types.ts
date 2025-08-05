@@ -30,6 +30,11 @@ export enum SolType {
   CARRELAGE = "CARRELAGE",
 }
 
+export enum LocationType {
+  Annuelle = "Annuelle",
+  Scolaire = "Scolaire",
+}
+
 // Extras Enums
 export enum HeatingType {
   NONE = "NONE",
@@ -118,6 +123,7 @@ export interface House {
   emplacement?: Emplacement;
   state?: HouseState;
   solType?: SolType;
+  locationType?: LocationType;
 
   images: string[];
   prixMin?: number;
@@ -210,6 +216,7 @@ export interface CreateHouseData {
   emplacement?: Emplacement;
   state?: HouseState;
   solType?: SolType;
+  locationType?: LocationType;
 
   images: string[];
   prixMin?: number;

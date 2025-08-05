@@ -40,6 +40,11 @@ enum HouseState {
   ETAT_ACCEPTABLE
 }
 
+enum LocationType {
+  Annuelle
+  Scolaire
+}
+
 enum SolType {
   PAQUET
   MARBRE
@@ -117,6 +122,7 @@ model House {
   emplacement Emplacement?  // Optional for VILLA and MAISON
   state       HouseState?    @default(BON_ETAT)
   solType     SolType?       @default(CARRELAGE)
+  locationType LocationType?
   
   images      String[]
   prixMin     Float?

@@ -39,6 +39,7 @@ export default function EditHousePage() {
     emplacement: "RDC" as any,
     state: "BON_ETAT" as any,
     solType: "CARRELAGE" as any,
+    locationType: undefined,
 
     images: [],
     prixMin: undefined,
@@ -131,6 +132,7 @@ export default function EditHousePage() {
           emplacement: houseData.emplacement,
           state: houseData.state,
           solType: houseData.solType,
+          locationType: houseData.locationType,
 
           images: houseData.images || [],
           prixMin: houseData.prixMin,
@@ -284,6 +286,7 @@ export default function EditHousePage() {
         emplacement: formData.emplacement,
         state: formData.state,
         solType: formData.solType,
+        locationType: formData.locationType,
 
         images: formData.images,
         prixMin: formData.prixMin,

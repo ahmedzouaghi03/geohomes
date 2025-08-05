@@ -91,6 +91,7 @@ export async function createHouse(data: CreateHouseData) {
         emplacement: data.emplacement,
         state: data.state,
         solType: data.solType,
+        locationType: data.locationType,
 
         images: data.images,
         prixMin: data.prixMin,

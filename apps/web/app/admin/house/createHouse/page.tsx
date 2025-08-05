@@ -91,6 +91,7 @@ export default function CreateHousePage() {
     emplacement: Emplacement.RDC,
     state: HouseState.BON_ETAT,
     solType: SolType.CARRELAGE,
+    locationType: undefined,
 
     images: [] as string[],
     prixMin: undefined,
