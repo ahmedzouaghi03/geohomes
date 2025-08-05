@@ -132,7 +132,7 @@ export default function EditHousePage() {
           emplacement: houseData.emplacement,
           state: houseData.state,
           solType: houseData.solType,
-          locationType: houseData.locationType,
+          locationType: houseData.locationType ?? undefined,
 
           images: houseData.images || [],
           prixMin: houseData.prixMin,
