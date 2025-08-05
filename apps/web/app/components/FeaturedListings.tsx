@@ -33,7 +33,7 @@ export default function FeaturedListings({
     <section className="mb-12">
       {/* Mobile-first responsive layout */}
       <div className="flex flex-col space-y-4 mb-6 md:flex-row md:justify-between md:items-center md:space-y-0">
-        <h2 className="text-2xl font-bold">
+        <h2 className="text-2xl font-bold hidden lg:block">
           {totalCounts[selectedCategory]?.toLocaleString("fr-FR") ?? 0} biens
           immobiliers
         </h2>
