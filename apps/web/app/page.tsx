@@ -16,6 +16,7 @@ import {
   City,
   HeatingType,
   GardenType,
+  LocationType,
 } from "@/types";
 import { Metadata } from "next";
 
@@ -69,6 +70,7 @@ async function getHomePageData() {
     emplacement: house.emplacement as Emplacement | undefined,
     state: house.state as HouseState | undefined,
     solType: house.solType as SolType | undefined,
+    locationType: house.locationType as LocationType | undefined,
     description: house.description ?? undefined,
     area: house.area ?? undefined,
     prixMin: house.prixMin ?? undefined,

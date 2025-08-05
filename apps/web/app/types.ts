@@ -123,7 +123,7 @@ export interface House {
   emplacement?: Emplacement;
   state?: HouseState;
   solType?: SolType;
-  locationType?: LocationType;
+  locationType?: LocationType | null;
 
   images: string[];
   prixMin?: number;
