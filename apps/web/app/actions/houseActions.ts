@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@monkeyprint/db";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import {
   CreateHouseData,
   UpdateHouseData,
@@ -120,6 +120,8 @@ export async function createHouse(data: CreateHouseData) {
     });
 
     revalidatePath("/houses");
+    revalidatePath("/");
+    revalidateTag("houses");
     return { success: true, data: house };
   } catch (error) {
     console.error("Failed to create house:", error);
