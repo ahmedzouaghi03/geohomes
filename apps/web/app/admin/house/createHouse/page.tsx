@@ -203,11 +203,7 @@ export default function CreateHousePage() {
     }
 
     if (currentStep < 3) {
-      if (formData.category !== "VENTE") {
-        setCurrentStep((prev) => prev + 2);
-      } else {
-        setCurrentStep((prev) => prev + 1);
-      }
+      setCurrentStep((prev) => prev + 1);
 
       // Only scroll if component is mounted (client-side)
       if (isMounted && typeof window !== "undefined") {
@@ -219,11 +215,7 @@ export default function CreateHousePage() {
   // Navigate to previous step
   const handleBack = () => {
     if (currentStep > 1) {
-      if (formData.category !== "VENTE") {
-        setCurrentStep((prev) => prev - 2);
-      } else {
-        setCurrentStep((prev) => prev - 1);
-      }
+      setCurrentStep((prev) => prev - 1);
 
       // Only scroll if component is mounted (client-side)
       if (isMounted && typeof window !== "undefined") {
