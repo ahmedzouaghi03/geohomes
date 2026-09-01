@@ -34,7 +34,7 @@ importers:
         version: 3.1.0
       uploadthing:
         specifier: ^7.5.2
-        version: 7.5.2(next@16.3.4(@types/node@22.13.5)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@4.0.9)
+        version: 7.5.2(next@16.3.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@4.0.9)
       zustand:
         specifier: ^5.0.3
         version: 5.0.3(@types/react@19.0.8)(react@19.0.0)
@@ -100,6 +100,9 @@ importers:
       '@monkeyprint/utils':
         specifier: workspace:*
         version: link:../../packages/utils
+      '@prisma/nextjs-monorepo-workaround-plugin':
+        specifier: ^7.10.0
+        version: 7.10.0
       '@radix-ui/react-label':
         specifier: ^2.1.7
         version: 2.1.7(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -224,7 +227,7 @@ importers:
     dependencies:
       '@uploadthing/react':
         specifier: ^7.3.0
-        version: 7.3.0(next@16.3.4(@types/node@22.13.5)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(uploadthing@7.5.2(next@16.3.4(@types/node@22.13.5)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@4.0.9))
+        version: 7.3.0(next@15.5.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(uploadthing@7.5.2(next@15.5.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@4.0.9))
       bcryptjs:
         specifier: ^3.0.2
         version: 3.0.2
@@ -233,7 +236,7 @@ importers:
         version: 4.1.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       uploadthing:
         specifier: ^7.5.2
-        version: 7.5.2(next@16.3.4(@types/node@22.13.5)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@4.0.9)
+        version: 7.5.2(next@15.5.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@4.0.9)
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -971,6 +974,9 @@ packages:
 
   '@prisma/get-platform@5.22.0':
     resolution: {integrity: sha512-pHhpQdr1UPFpt+zFfnPazhulaZYCUqeIcPpJViYoq9R+D/yw4fjE+CtnsnKzPYm0ddUbeXUzjGVGIRVgPDCk4Q==}
+
+  '@prisma/nextjs-monorepo-workaround-plugin@7.10.0':
+    resolution: {integrity: sha512-8MSZZrYjPY1azTSeb89tZjmk3OoyejwqsIpXA3zewNpKObHgfzlS3TE9P6jAUj816CNnTCo7Qi9zLDFjWsEmnQ==}
 
   '@radix-ui/number@1.1.1':
     resolution: {integrity: sha512-MkKCwxlXTgz6CFoJx3pCwn07GKp36+aZyu/u2Ln2VrA5DcdyCZkASEDBTd8x5whTQQL5CiYf4prXKLcgQdv29g==}
@@ -3491,7 +3497,7 @@ snapshots:
 
   '@next/font@14.2.15(next@16.3.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))':
     dependencies:
-      next: 16.3.4(@types/node@22.13.5)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      next: 16.3.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
   '@next/swc-darwin-arm64@15.5.4':
     optional: true
@@ -3572,6 +3578,8 @@ snapshots:
   '@prisma/get-platform@5.22.0':
     dependencies:
       '@prisma/debug': 5.22.0
+
+  '@prisma/nextjs-monorepo-workaround-plugin@7.10.0': {}
 
   '@radix-ui/number@1.1.1': {}
 
@@ -4021,15 +4029,6 @@ snapshots:
       uploadthing: 7.5.2(next@15.5.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@4.0.9)
     optionalDependencies:
       next: 15.5.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-
-  '@uploadthing/react@7.3.0(next@16.3.4(@types/node@22.13.5)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(uploadthing@7.5.2(next@16.3.4(@types/node@22.13.5)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@4.0.9))':
-    dependencies:
-      '@uploadthing/shared': 7.1.7
-      file-selector: 0.6.0
-      react: 19.0.0
-      uploadthing: 7.5.2(next@16.3.4(@types/node@22.13.5)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@4.0.9)
-    optionalDependencies:
-      next: 16.3.4(@types/node@22.13.5)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
   '@uploadthing/shared@7.1.7':
     dependencies:
@@ -4899,7 +4898,7 @@ snapshots:
       - '@babel/core'
       - babel-plugin-macros
 
-  next@16.3.4(@types/node@22.13.5)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  next@16.3.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       '@next/env': 16.3.4
       '@swc/helpers': 0.5.23
@@ -4918,7 +4917,7 @@ snapshots:
       '@next/swc-linux-x64-musl': 16.3.4
       '@next/swc-win32-arm64-msvc': 16.3.4
       '@next/swc-win32-x64-msvc': 16.3.4
-      sharp: 0.35.4(@types/node@22.13.5)
+      sharp: 0.35.4
     transitivePeerDependencies:
       - '@babel/core'
       - '@types/node'
@@ -5287,7 +5286,7 @@ snapshots:
       '@img/sharp-win32-x64': 0.34.5
     optional: true
 
-  sharp@0.35.4(@types/node@22.13.5):
+  sharp@0.35.4:
     dependencies:
       '@img/colour': 1.1.0
       detect-libc: 2.1.2
@@ -5318,7 +5317,6 @@ snapshots:
       '@img/sharp-win32-arm64': 0.35.4
       '@img/sharp-win32-ia32': 0.35.4
       '@img/sharp-win32-x64': 0.35.4
-      '@types/node': 22.13.5
     optional: true
 
   shebang-command@2.0.0:
@@ -5513,7 +5511,7 @@ snapshots:
       next: 15.5.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       tailwindcss: 4.0.9
 
-  uploadthing@7.5.2(next@16.3.4(@types/node@22.13.5)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@4.0.9):
+  uploadthing@7.5.2(next@16.3.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@4.0.9):
     dependencies:
       '@effect/platform': 0.72.0(effect@3.12.0)
       '@standard-schema/spec': 1.0.0-beta.4
@@ -5521,7 +5519,7 @@ snapshots:
       '@uploadthing/shared': 7.1.7
       effect: 3.12.0
     optionalDependencies:
-      next: 16.3.4(@types/node@22.13.5)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      next: 16.3.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       tailwindcss: 4.0.9
 
   uri-js@4.4.1:
