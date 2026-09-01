@@ -1,4 +1,5 @@
 import { NextConfig } from "next";
+import { PrismaPlugin } from "@prisma/nextjs-monorepo-workaround-plugin";  
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@monkeyprint/db", "@monkeyprint/utils"],
@@ -27,6 +28,13 @@ const nextConfig: NextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
+  },
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.plugins.push(new PrismaPlugin());
+    }
+    config.externals.push("bufferutil", "utf-8-validate");
+    return config;
   },
 };
 
