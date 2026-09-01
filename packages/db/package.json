@@ -4,6 +4,7 @@
     "main": "./index.ts",
     "scripts": {
         "tsc": "tsc",
+        "postinstall": "prisma generate",
         "clean": "rm -rf dist",
         "prebuild": "pnpm clean && pnpm db:generate-schemas",
         "build": "tsc",
