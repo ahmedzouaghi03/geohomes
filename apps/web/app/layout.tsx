@@ -2,11 +2,10 @@ import "@/globals.css";
 import { Toaster } from "react-hot-toast";
 import Header from "@/components/Header";
 
-export default async function LocaleLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
 }) {
   return (
     <html suppressHydrationWarning>
